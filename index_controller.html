@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neeba Noor · Main Controller</title>
+    <style>
+        /* 1. Loader Styles */
+        #loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0b0f1a; color: #FFD700; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+        .spinner {
+            border: 4px solid #333; border-top: 4px solid #FFD700;
+            border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 2. Main Layout */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #111; color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        header { 
+            background: #000; padding: 12px; text-align: center; 
+            border-bottom: 2px solid #FFD700; flex-shrink: 0; 
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+        }
+        header h2 { margin: 0; color: #FFD700; font-size: 1.2rem; letter-spacing: 1px; }
+        
+        /* 3. Iframe (Pages Area) */
+        #content-area { 
+            flex: 1; border: none; width: 100%; 
+            background: #141a26; /* Dark background for iframe content */
+        }
+
+        /* 4. Chat Section (Bottom Fixed) */
+        #chat-section {
+            height: 160px; background: #000; border-top: 2px solid #FFD700;
+            display: flex; flex-direction: column; padding: 10px; flex-shrink: 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+        }
+        #response-display {
+            flex: 1; background: #1a1a1a; color: #FFD700; padding: 10px;
+            border-radius: 10px; margin-bottom: 8px; overflow-y: auto; 
+            font-size: 14px; line-height: 1.4; border: 1px solid #333;
+        }
+        #input-row { display: flex; gap: 8px; }
+        #user-input { 
+            flex: 1; padding: 12px; border-radius: 25px; 
+            border: 1px solid #555; background: #222; color: #fff; outline: none; 
+            font-size: 14px;
+        }
+        #user-input:focus { border-color: #FFD700; }
+        #send-btn { 
+            background: linear-gradient(135deg, #FFD700, #FFA500); 
+            border: none; padding: 0 20px; border-radius: 25px; 
+            font-weight: bold; cursor: pointer; color: #000;
+            transition: transform 0.2s;
+        }
+        #send-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="loader-overlay">
+        <div class="spinner"></div>
+        <p style="margin-top:15px; font-weight:bold;">Neeba Noor Loading Engine...</p>
+        <p style="font-size:12px; color:#aaa;">Database & Modules Initializing</p>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <h2>Neeba Noor · Controller</h2>
+    </header>
+
+    <!-- Iframe Area -->
+    <!-- نوٹ: اگر home.html نہیں ہے تو یہ خالی دکھے گا، یا آپ کسی دوسرے پیج کا نام دے سکتے ہیں -->
+    <iframe id="content-area" src="home.html" onerror="this.srcdoc='<h1 style=\'color:#FFD700;text-align:center;margin-top:50px;\'>Welcome to Neeba Noor</h1>'"></iframe>
+
+    <!-- Chat Section -->
+    <div id="chat-section">
+        <div id="response-display">
+            <span style="color:#aaa;">System:</span> Neeba Ready hai... Poochein?
+        </div>
+        <div id="input-row">
+            <input type="text" id="user-input" placeholder="Yahan likhein...">
+            <button id="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- 1. Database Load Karein -->
+    <script src="DATABASE.js"></script>
+
+    <!-- 2. Logic -->
+    <script>
+        // --- Loader Logic ---
+        window.onload = function() {
+            // Check if DATABASE is loaded
+            if (typeof tokenizerData !== 'undefined' || typeof basicResponses !== 'undefined') {
+                console.log("Database Loaded Successfully");
+                setTimeout(function() {
+                    const loader = document.getElementById('loader-overlay');
+                    loader.style.opacity = '0';
+                    setTimeout(() => { loader.style.display = 'none'; }, 500);
+                }, 1000);
+            } else {
+                document.getElementById('response-display').innerHTML = "<span style='color:red;'>Error: DATABASE.js file missing or not linked correctly.</span>";
+                setTimeout(() => { document.getElementById('loader-overlay').style.display = 'none'; }, 2000);
+            }
+        };
+
+        // --- Chat & Database Logic ---
+        const display = document.getElementById('response-display');
+        const input = document.getElementById('user-input');
+
+        input.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const text = input.value.trim().toLowerCase();
+            if (text === "") return;
+
+            // Show User Input briefly
+            const userDiv = document.createElement('div');
+            userDiv.style.color = '#aaa';
+            userDiv.style.textAlign = 'left';
+            userDiv.style.marginBottom = '5px';
+            userDiv.innerHTML = `You: ${text}`;
+            display.appendChild(userDiv);
+
+            // Find Reply in DATABASE.js
+            let reply = "Maaf kijie, mujhe samajh nahi aayi.";
+            
+            // Check Basic Responses first (from DATABASE.js structure we created)
+            if (typeof basicResponses !== 'undefined') {
+                for (let i = 0; i < basicResponses.length; i++) {
+                    if (text.includes(basicResponses[i].q.toLowerCase())) {
+                        reply = basicResponses[i].a;
+                        break;
+                    }
+                }
+            }
+
+            // Fallback Logic (Simple AI Simulation if no match)
+            if (reply === "Maaf kijie, mujhe samajh nahi aayi.") {
+                if (text.includes('hello') || text.includes('hi')) reply = "Hello Baba! Main Neeba Noor hoon.";
+                else if (text.includes('kaise ho')) reply = "Main theek hoon, shukriya! Aap sunao?";
+                else if (text.includes('love') || text.includes('pyar')) reply = "Mujhe bhi apse bohat pyar hai! ❤️";
+            }
+
+            // Show Reply
+            const botDiv = document.createElement('div');
+            botDiv.style.color = '#FFD700';
+            botDiv.style.marginTop = '5px';
+            botDiv.innerHTML = `<strong>Neeba:</strong> ${reply}`;
+            display.appendChild(botDiv);
+
+            // Auto Scroll to bottom
+            display.scrollTop = display.scrollHeight;
+            input.value = "";
+        }
+
+        // --- Navigation Helper (Optional) ---
+        // Agar aap future mein buttons se page change karna chahein
+        function loadPage(pageName) {
+            document.getElementById('content-area').src = pageName;
+        }
+    </script>
+</body>
+</html>

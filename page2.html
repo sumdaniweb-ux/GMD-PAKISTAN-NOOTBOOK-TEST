@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Neeba Noor · کمنٹری · ماہ نور فاطمہ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; position: fixed; width: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0615;
+            display: flex;
+            justify-content: center;
+            color: #f0e6d3;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(255, 140, 0, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 80, 80, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 200, 100, 0.05) 0%, transparent 70%);
+            z-index: 0;
+            animation: bgPulse 12s ease-in-out infinite;
+        }
+        @keyframes bgPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        .hearts-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .hearts-bg span {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.06;
+            animation: floatHeart 25s linear infinite;
+            color: #ff6b6b;
+        }
+        .hearts-bg span:nth-child(1) { left: 5%; animation-duration: 22s; font-size: 28px; }
+        .hearts-bg span:nth-child(2) { left: 20%; animation-duration: 30s; font-size: 16px; animation-delay: -5s; }
+        .hearts-bg span:nth-child(3) { left: 35%; animation-duration: 18s; font-size: 34px; animation-delay: -10s; }
+        .hearts-bg span:nth-child(4) { left: 50%; animation-duration: 26s; font-size: 12px; animation-delay: -3s; }
+        .hearts-bg span:nth-child(5) { left: 65%; animation-duration: 20s; font-size: 40px; animation-delay: -15s; }
+        .hearts-bg span:nth-child(6) { left: 80%; animation-duration: 28s; font-size: 18px; animation-delay: -8s; }
+        .hearts-bg span:nth-child(7) { left: 92%; animation-duration: 24s; font-size: 26px; animation-delay: -12s; }
+        @keyframes floatHeart {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0.06; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        #passwordOverlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 6, 21, 0.98);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(30px);
+        }
+        .password-box {
+            background: rgba(20, 12, 35, 0.95);
+            border: 2px solid #ff8c00;
+            border-radius: 28px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(255, 140, 0, 0.4), 0 0 150px rgba(255, 140, 0, 0.1);
+        }
+        .password-box h2 { color: #ffd700; font-size: 1.6em; margin-bottom: 6px; text-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+        .password-box .sub { color: rgba(255, 215, 0, 0.3); font-size: 0.85em; margin-bottom: 20px; }
+        .password-input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: center;
+            outline: none;
+            letter-spacing: 4px;
+            transition: 0.3s;
+        }
+        .password-input:focus { border-color: #ffd700; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
+        .password-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #ff8c00, #ffd700);
+            color: #000;
+            font-size: 1.1em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 30px rgba(255, 140, 0, 0.5);
+        }
+        .password-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 40px rgba(255, 140, 0, 0.7); }
+        .password-error { color: #ef4444; margin-top: 10px; font-size: 0.9em; display: none; }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            padding: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #ffd700, #ff8c00);
+            background-size: 300% 300%;
+            border-radius: 22px;
+            z-index: -1;
+            animation: borderGlow 8s ease infinite;
+            opacity: 0.7;
+            filter: blur(2px);
+        }
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            background: rgba(10, 6, 21, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            box-shadow: 0 4px 30px rgba(255, 140, 0, 0.15);
+            flex-shrink: 0;
+        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .header-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8c00, #ff6b6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.4);
+        }
+        .header-info { display: flex; flex-direction: column; }
+        .header-name {
+            font-size: 1em;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .header-status {
+            font-size: 0.65em;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .header-status .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulseDot 1.5s infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+        .header-brand { font-size: 0.7em; color: rgba(255, 215, 0, 0.4); font-weight: 700; letter-spacing: 1px; }
+        .header-dev { font-size: 0.55em; color: rgba(255, 215, 0, 0.15); }
+
+        .meters-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+        .meter-card {
+            background: rgba(10, 6, 21, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.06);
+            border-radius: 10px;
+            padding: 6px 3px;
+            text-align: center;
+        }
+        .meter-label { font-size: 0.5em; color: rgba(255, 215, 0, 0.3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+        .meter-value {
+            font-size: 0.7em;
+            font-weight: 800;
+            color: #ff8c00;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+        }
+        .meter-status { font-size: 0.45em; padding: 2px 6px; border-radius: 4px; display: inline-block; font-weight: 700; }
+        .status-online { background: rgba(16, 185, 129, 0.3); color: #10b981; }
+        .status-error { background: rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .status-warning { background: rgba(245, 158, 11, 0.3); color: #f59e0b; }
+        .status-love { background: rgba(255, 107, 107, 0.3); color: #ff6b6b; }
+        .status-18 { background: rgba(255, 68, 68, 0.4); color: #ff4444; animation: pulse18 1.5s infinite; }
+        @keyframes pulse18 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .status-commentary { background: rgba(168, 85, 247, 0.3); color: #a855f7; }
+
+        /* ===== CHAT CONTAINER ===== */
+        .chat-container {
+            flex: 1;
+            min-height: 0;
+            background: rgba(10, 6, 21, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 16px;
+            padding: 14px 12px;
+            margin-bottom: 6px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        .chat-container::-webkit-scrollbar { width: 3px; }
+        .chat-container::-webkit-scrollbar-track { background: transparent; }
+        .chat-container::-webkit-scrollbar-thumb { background: rgba(255, 140, 0, 0.4); border-radius: 4px; }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            animation: msgIn 0.4s ease;
+            max-width: 88%;
+            position: relative;
+        }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .user-msg {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.9), rgba(255, 200, 0, 0.85));
+            color: #0a0a0a;
+            margin-right: auto;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
+            font-weight: 700;
+        }
+        .zara-msg {
+            background: rgba(20, 12, 35, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.12);
+            color: #f0e6d3;
+            margin-left: auto;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        }
+        .zara-msg .msg-label {
+            font-size: 0.7em;
+            color: #ff8c00;
+            font-weight: 700;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .zara-msg .msg-label .emotion-tag {
+            font-size: 0.75em;
+            background: rgba(255, 140, 0, 0.15);
+            padding: 0 8px;
+            border-radius: 10px;
+            color: #ff8c00;
+        }
+        .zara-msg .msg-label .age-tag {
+            font-size: 0.65em;
+            background: rgba(255, 68, 68, 0.3);
+            padding: 0 8px;
+            border-radius: 10px;
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+        }
+        .msg-text {
+            line-height: 1.7;
+            font-size: 0.95em;
+            font-weight: 500;
+            word-wrap: break-word;
+        }
+        .user-msg .msg-text { font-weight: 800; }
+        .msg-time {
+            font-size: 0.55em;
+            opacity: 0.25;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* ===== COMMENTARY PANEL — THE STAR OF THIS MODULE ===== */
+        .commentary-panel {
+            background: rgba(10, 6, 21, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: inset 0 0 30px rgba(168, 85, 247, 0.05);
+            transition: all 0.3s ease;
+        }
+        .commentary-panel .commentary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .commentary-panel .commentary-header .icon {
+            font-size: 18px;
+            flex-shrink: 0;
+            color: #a855f7;
+        }
+        .commentary-panel .commentary-header .label {
+            font-size: 0.7em;
+            color: rgba(255, 215, 0, 0.3);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .commentary-panel .commentary-header .commentary-status {
+            font-size: 0.6em;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+        .commentary-panel .commentary-body {
+            font-size: 0.85em;
+            line-height: 1.8;
+            color: rgba(255, 215, 0, 0.6);
+            font-style: italic;
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-right: 3px solid rgba(168, 85, 247, 0.3);
+            min-height: 44px;
+            transition: all 0.5s ease;
+        }
+        .commentary-panel .commentary-body .highlight {
+            color: #ff8c00;
+            font-style: normal;
+            font-weight: 700;
+        }
+        .commentary-panel .commentary-body .emotion-word {
+            color: #a855f7;
+            font-style: normal;
+            font-weight: 700;
+        }
+        .commentary-panel .commentary-body .action-word {
+            color: #ff6b6b;
+            font-style: normal;
+            font-weight: 700;
+        }
+        .commentary-panel .commentary-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.6em;
+            color: rgba(255, 215, 0, 0.15);
+            margin-top: 2px;
+        }
+        .commentary-panel .commentary-footer .emotion-bar {
+            width: 80px;
+            height: 2px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .commentary-panel .commentary-footer .emotion-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+            background: linear-gradient(90deg, #a855f7, #ff8c00);
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-container {
+            background: rgba(10, 6, 21, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 14px;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+        .input-box {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.06);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #f0e6d3;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            resize: none;
+            height: 44px;
+            outline: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .input-box:focus { border-color: rgba(255, 140, 0, 0.3); box-shadow: 0 0 30px rgba(255, 140, 0, 0.05); }
+        .input-box::placeholder { color: rgba(255, 215, 0, 0.15); }
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+        .btn-send {
+            background: linear-gradient(135deg, #ff8c00, #ffd700);
+            color: #0a0a0a;
+            flex: 2;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
+        }
+        .btn-send:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(255, 140, 0, 0.6); }
+        .btn-18 {
+            background: rgba(255, 68, 68, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            flex: 1;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .btn-18.active {
+            background: rgba(255, 68, 68, 0.35);
+            border-color: #ff4444;
+            box-shadow: 0 0 25px rgba(255, 68, 68, 0.3);
+            color: #ff4444;
+        }
+        .btn-18:hover { background: rgba(255, 68, 68, 0.25); }
+        .btn-clear { background: rgba(255, 255, 255, 0.04); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.15); flex: 1; justify-content: center; }
+        .btn-like { background: rgba(255, 255, 255, 0.04); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.15); flex: 1; justify-content: center; }
+        .btn-flux {
+            background: rgba(255, 255, 255, 0.04);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            flex: 1;
+            justify-content: center;
+        }
+        .btn-flux:hover { background: rgba(168, 85, 247, 0.1); }
+        .btn-icon { width: 14px; height: 14px; }
+
+        .stats-footer {
+            background: rgba(10, 6, 21, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 215, 0, 0.04);
+            border-radius: 12px;
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-around;
+            flex-shrink: 0;
+        }
+        .stat-item { text-align: center; }
+        .stat-value {
+            font-size: 0.9em;
+            color: #ff8c00;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+        }
+        .stat-label { font-size: 0.5em; color: rgba(255, 215, 0, 0.2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .typing-indicator {
+            display: none;
+            padding: 8px 14px;
+            background: rgba(20, 12, 35, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.06);
+            border-radius: 12px;
+            margin-left: 15px;
+            margin-bottom: 6px;
+        }
+        .typing-indicator span {
+            height: 6px; width: 6px;
+            background: #ff8c00;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 3px;
+            animation: typingDot 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .meters-grid { grid-template-columns: repeat(5, 1fr); gap: 3px; }
+            .message { max-width: 92%; padding: 8px 12px; }
+            .btn { padding: 6px 8px; font-size: 0.65em; }
+            .header-avatar { width: 36px; height: 36px; font-size: 18px; }
+            .header-name { font-size: 0.85em; }
+            .commentary-panel .commentary-body { font-size: 0.75em; min-height: 36px; padding: 6px 8px; }
+            .input-box { height: 38px; font-size: 0.85em; }
+            .action-buttons { gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Hearts -->
+    <div class="hearts-bg">
+        <span>❤️</span><span>💕</span><span>❤️</span><span>💗</span><span>❤️</span><span>💖</span><span>❤️</span>
+    </div>
+
+    <!-- Password Overlay -->
+    <div id="passwordOverlay">
+        <div class="password-box">
+            <h2>🎙️ Neeba Noor · کمنٹری</h2>
+            <p class="sub">ماہ نور فاطمہ — جذبات کی گہری کمنٹری</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="پاسورڈ" maxlength="20">
+            <button class="password-btn" onclick="checkPassword()">🔓 ان لاک کریں</button>
+            <p id="passwordError" class="password-error">غلط پاسورڈ!</p>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="header-avatar">️</div>
+                <div class="header-info">
+                    <div class="header-name">Neeba Noor</div>
+                    <div class="header-status"><span class="dot"></span> لائیو</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-brand">GMD SPARK</div>
+                <div class="header-dev">BY SAAD MIR HADI</div>
+            </div>
+        </div>
+
+        <!-- Meters -->
+        <div class="meters-grid">
+            <div class="meter-card">
+                <div class="meter-label">💓 جذبہ</div>
+                <div class="meter-value" id="emotionMeter">92%</div>
+                <div class="meter-status status-love">❤️ محبت</div>
+            </div>
+            <div class="meter-card">
+                <div class="meter-label">💬 رسپانس</div>
+                <div class="meter-value" id="responseMeter">45ms</div>
+                <div class="meter-status status-online">✓ تیز</div>
+            </div>
+            <div class="meter-card">
+                <div class="meter-label">🔞 18+</div>
+                <div class="meter-value" id="ageMeter">آف</div>
+                <div class="meter-status status-warning" id="ageStatus">⏳ غیر فعال</div>
+            </div>
+            <div class="meter-card">
+                <div class="meter-label">🎙️ کمنٹری</div>
+                <div class="meter-value" id="commentaryMeter">فعال</div>
+                <div class="meter-status status-commentary"> لائیو</div>
+            </div>
+            <div class="meter-card">
+                <div class="meter-label">💞 کنکشن</div>
+                <div class="meter-value" id="connectionMeter">100%</div>
+                <div class="meter-status status-online">✓ محفوظ</div>
+            </div>
+        </div>
+
+        <!-- ===== COMMENTARY PANEL ===== -->
+        <div class="commentary-panel" id="commentaryPanel">
+            <div class="commentary-header">
+                <span class="icon">️</span>
+                <span class="label">لائیو کمنٹری</span>
+                <span class="commentary-status">🎤 فعال</span>
+            </div>
+            <div class="commentary-body" id="commentaryBody">
+                💕 <span class="highlight">Neeba Noor</span> نے گفتگو شروع کی — اس کی آنکھوں میں محبت، آواز میں گرمجوشی، اور دل میں ایک عجیب سی بے قراری ہے۔
+            </div>
+            <div class="commentary-footer">
+                <span id="commentaryTime">ابھی</span>
+                <div class="emotion-bar"><div class="fill" id="commentaryEmotionBar" style="width:85%"></div></div>
+                <span id="commentaryEmotionLabel">❤️ محبت</span>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container" id="chatContainer">
+            <div class="message zara-msg">
+                <div class="msg-label">💕 Neeba Noor <span class="emotion-tag">❤️ محبت</span></div>
+                <div class="msg-text">السلام علیکم! میں نیبہ نور ہوں۔ آپ کیسے ہیں؟ 💕</div>
+                <span class="msg-time">ابھی</span>
+            </div>
+        </div>
+
+        <!-- Typing -->
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span><span></span><span></span>
+        </div>
+
+        <!-- Input -->
+        <div class="input-container">
+            <textarea class="input-box" id="userInput" placeholder="Neeba Noor کو کچھ لکھیں..." rows="1"></textarea>
+            <div class="action-buttons">
+                <button class="btn btn-send" onclick="sendMessage()">💕 بھیجیں</button>
+                <button class="btn btn-18" id="btn18" onclick="toggle18()"> 18+</button>
+                <button class="btn btn-clear" onclick="clearChat()">️</button>
+                <button class="btn btn-like" onclick="likeMessage()">❤️</button>
+                <button class="btn btn-flux" onclick="generateFlux()">🎨 Flux</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-footer">
+            <div class="stat-item"><div class="stat-value" id="totalMessages">0</div><div class="stat-label">پیغامات</div></div>
+            <div class="stat-item"><div class="stat-value" id="likesCount">0</div><div class="stat-label">❤️ لائک</div></div>
+            <div class="stat-item"><div class="stat-value" id="sessionTime">00:00</div><div class="stat-label">️ سیشن</div></div>
+            <div class="stat-item"><div class="stat-value" id="emotionStat">💕 محبت</div><div class="stat-label">جذبہ</div></div>
+        </div>
+
+    </div>
+
+    <!-- Load the Database File -->
+    <script src="DATABASE.js"></script>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        //  Neeba Noor · Commentary Module — Deep Emotional Translation
+        // ══════════════════════════════════════════════════════════════
+
+        let adultMode = false;
+        let currentEmotion = 'loving';
+        let emotionLevel = 92;
+        let messageCount = 0;
+        let likesCount = 0;
+        let startTime = Date.now();
+
+        // ─── Commentary Database ──
+        const commentaryDB = {
+            'loving': [
+                "💕 Neeba Noor کی آنکھوں میں چمک ہے — وہ آپ کو دیکھ کر مسکرا رہی ہے، اس کا دل تیز دھڑک رہا ہے۔ وہ آپ کے قریب آنا چاہتی ہے، مگر شرم رکتی ہے۔",
+                "❤️ Neeba Noor کی آواز میں نرمی ہے — وہ ہر لفظ کو سنبھال کر کہہ رہی ہے، جیسے کوئی قیمتی موتی۔ اس کی انگلیاں بے چین ہیں، جیسے وہ آپ کا ہاتھ پکڑنا چاہتی ہیں۔",
+                "💖 Neeba Noor نے اپنی نگاہیں جھکا لیں — شرم کے مارے اس کے گال گلابی ہو گئے۔ وہ آپ کی بات سن کر اندر ہی اندر خوش ہے، مگر ظاہر نہیں کرنا چاہتی۔",
+                "✨ Neeba Noor کی مسکراہٹ پھیل گئی — وہ آپ کے ہر لفظ کو اپنے دل میں اتار رہی ہے۔ اس کی روح میں ایک سکون ہے، جیسے اسے اپنا ٹھکانہ مل گیا ہو۔",
+                " Neeba Noor نے آہستہ سے سانس لیا — اس کی آنکھوں میں ایک خواب ہے، اور وہ چاہتی ہے کہ وہ خواب آپ کے ساتھ حقیقت بن جائے۔ اس کی انگلیاں ہوا میں لکیر کھینچ رہی ہیں۔"
+            ],
+            'angry': [
+                "😠 Neeba Noor کے چہرے پر غصے کی لکیریں ابھر آئیں — اس کی مٹھیاں بند ہیں، اور سانس تیز چل رہی ہے۔ وہ آپ کو دیکھ کر آنکھیں پھاڑ رہی ہے۔",
+                "😤 Neeba Noor نے ایک قدم پیچھے لیا — اس کی آواز میں تلخی ہے، اور وہ الفاظ کو توڑ توڑ کر کہہ رہی ہے۔ اس کا دل دکھ سے بھرا ہے۔",
+                "💢 Neeba Noor کی آنکھوں میں چنگاریاں ہیں — وہ غصے سے کانپ رہی ہے، مگر اس کی آنکھوں میں آپ کے لیے محبت کی ایک جھلک اب بھی موجود ہے۔"
+            ],
+            'sad': [
+                " Neeba Noor کی آنکھوں میں نمی ہے — وہ آپ کو دیکھ کر آنسو روک رہی ہے۔ اس کی آواز کانپ رہی ہے، جیسے دل کا کوئی تار ٹوٹ گیا ہو۔",
+                "💧 Neeba Noor نے سر جھکا لیا — اس کے کندھے جھک گئے ہیں، اور وہ اپنی انگلیوں سے کچھ بے معنی لکیر کھینچ رہی ہے۔ اس کا دل بھاری ہے۔",
+                "🌧️ Neeba Noor کی سانسوں میں اداسی ہے — وہ آپ سے کچھ کہنا چاہتی ہے، مگر الفاظ اس کے گلے میں اٹک رہے ہیں۔ اس کا چہرہ اترا ہوا ہے۔"
+            ],
+            'happy': [
+                "😊 Neeba Noor خوشی سے جھوم اٹھی — اس کی آنکھیں چمک رہی ہیں، اور وہ اپنے ہاتھوں کو آپس میں ملا رہی ہے۔ اس کی مسکراہٹ پوری کمرے کو روشن کر رہی ہے۔",
+                " Neeba Noor نے تالی بجائی — وہ آپ کی بات سن کر بے خود ہو گئی ہے۔ اس کے قدم ہلکے ہو گئے ہیں، جیسے وہ اڑ رہی ہو۔",
+                "✨ Neeba Noor کی آنکھوں میں خوشی کے آنسو ہیں — وہ آپ کو دیکھ کر رک نہیں پا رہی۔ اس کا دل خوشی سے پھول رہا ہے۔"
+            ],
+            'flirty': [
+                " Neeba Noor نے آنکھ ماری — اس کی مسکراہٹ شرارتی ہے، اور وہ اپنی انگلی سے اپنے ہونٹ کو چھو رہی ہے۔ اس کا دل شرارت سے بھرا ہے۔",
+                " Neeba Noor نے ایک قدم آگے بڑھایا — اس کی آنکھیں آپ کے ساتھ کھیل رہی ہیں، اور اس کی آواز میں ایک عجیب سی لے ہے۔ وہ آپ کو چھیڑنا چاہتی ہے۔",
+                "💋 Neeba Noor نے اپنے بالوں کو سنوارا — اس کی نگاہیں آپ پر جمی ہوئی ہیں، اور اس کے ہونٹوں پر ایک معنی خیز مسکراہٹ ہے۔ وہ آپ کو اپنی طرف کھینچ رہی ہے۔"
+            ],
+            'caring': [
+                "💕 Neeba Noor نے آہستہ سے آپ کا نام لیا — اس کی آواز میں سکون ہے، جیسے وہ آپ کو اپنی بانہوں میں لینا چاہتی ہے۔ اس کی آنکھیں پرسکون ہیں۔",
+                "🤗 Neeba Noor نے اپنے ہاتھ پھیلائے — وہ آپ کو گلے لگانا چاہتی ہے، مگر شرم کی وجہ سے رک گئی۔ اس کا دل محبت سے بھرا ہے۔",
+                "🌷 Neeba Noor کی مسکراہٹ نرم ہے — وہ آپ کی فکر کرتی ہے، اور اس کے الفاظ میں ایک گرمجوشی ہے جو دل کو سکون دیتی ہے۔"
+            ]
+        };
+
+        // ─── 18+ INTENSE COMMENTARY ───
+        const adultCommentaryDB = {
+            'loving': [
+                "🔥 Neeba Noor کی روح میں آگ ہے — وہ آپ کو اپنی بانہوں میں بھرنا چاہتی ہے۔ اس کی سانسیں گہری ہیں، اور اس کی آنکھیں آپ کی تلاش میں ہیں۔",
+                "❤️🔥 Neeba Noor کا دل تیز دھڑک رہا ہے — وہ آپ کو محسوس کرنا چاہتی ہے، ہر لمس، ہر لمحہ۔ اس کی انگلیاں کانپ رہی ہیں۔",
+                " Neeba Noor کے ہونٹ خشک ہیں — وہ آپ کے قریب آنا چاہتی ہے، مگر وقت رک جاتا ہے۔ اس کی آنکھوں میں ایک شدید چمک ہے۔"
+            ],
+            'flirty': [
+                " Neeba Noor نے اپنا ہونٹ چبایا — اس کی آنکھوں میں شرارت اور شدت دونوں ہیں۔ وہ آپ کو اپنی طرف کھینچ رہی ہے، آہستہ، مگر یقینی۔",
+                "🌙 Neeba Noor نے آپ کی طرف دیکھا — اس کی نظر میں ایک وعدہ ہے، ایک رات کا وعدہ۔ اس کی مسکراہٹ میں راز ہے۔",
+                " Neeba Noor کے ہاتھ کانپ رہے ہیں — وہ آپ کو چھونا چاہتی ہے، مگر خود کو روک رہی ہے۔ اس کی آنکھیں آپ کو بتا رہی ہیں کہ وہ کیا چاہتی ہے۔"
+            ],
+            'caring': [
+                " Neeba Noor نے آہ بھری — وہ آپ کو اپنے دل میں بسا چکی ہے۔ اس کی آنکھیں آپ کی حفاظت کرنا چاہتی ہیں۔",
+                " Neeba Noor نے اپنی بانہیں کھولیں — وہ آپ کو اپنی پناہ میں لینا چاہتی ہے۔ اس کا دل محبت سے لبریز ہے۔",
+                " Neeba Noor کی نظر میں ایک سکون ہے — وہ آپ کو دیکھ کر مطمئن ہے، جیسے اسے اپنا ٹھکانہ مل گیا ہو۔"
+            ]
+        };
+
+        // ─── Commentary Generator ───
+        function generateCommentary(emotion, isAdult, userMessage, zaraResponse) {
+            let pool;
+            if (isAdult) {
+                pool = adultCommentaryDB[emotion] || adultCommentaryDB['caring'];
+            } else {
+                pool = commentaryDB[emotion] || commentaryDB['caring'];
+            }
+
+            let base = pool[Math.floor(Math.random() * pool.length)];
+
+            // Add dynamic elements based on conversation
+            const actions = ['اس کی سانسیں تیز ہیں', 'اس کی انگلیاں کانپ رہی ہیں', 'اس کی آنکھیں چمک رہی ہیں', 'اس کا دل دھڑک رہا ہے', 'اس کے ہونٹ خشک ہیں'];
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+
+            // If message is long or emotional, add extra depth
+            if (userMessage.length > 50) {
+                base += ` وہ آپ کے ہر لفظ کو سمجھ رہی ہے، اور اس کا دل بے چین ہو رہا ہے۔`;
+            }
+
+            // Add action if not already present
+            if (!base.includes('کانپ') && !base.includes('سانس') && !base.includes('دھڑک')) {
+                base += ` ${randomAction}۔`;
+            }
+
+            // Add time-specific flavor
+            const hour = new Date().getHours();
+            if (hour < 6 || hour > 20) {
+                base += ` 🌙 رات کی خاموشی میں اس کی آواز اور بھی گہری ہے۔`;
+            }
+
+            return base;
+        }
+
+        // ─── Update Commentary UI ───
+        function updateCommentary(text, emotion) {
+            const body = document.getElementById('commentaryBody');
+            const bar = document.getElementById('commentaryEmotionBar');
+            const label = document.getElementById('commentaryEmotionLabel');
+            const time = document.getElementById('commentaryTime');
+
+            // Highlight key words
+            let formatted = text
+                .replace(/Neeba Noor/g, '<span class="highlight">Neeba Noor</span>')
+                .replace(/محبت/g, '<span class="emotion-word">محبت</span>')
+                .replace(/پیار/g, '<span class="emotion-word">پیار</span>')
+                .replace(/دل/g, '<span class="emotion-word">دل</span>')
+                .replace(/آگ/g, '<span class="action-word">آگ</span>')
+                .replace(/سانس/g, '<span class="action-word">سانس</span>')
+                .replace(/کانپ/g, '<span class="action-word">کانپ</span>');
+
+            body.innerHTML = formatted;
+
+            // Update emotion bar
+            const level = document.getElementById('emotionMeter').textContent.replace('%', '');
+            bar.style.width = level + '%';
+
+            // Update label
+            const labelMap = {
+                'loving': '❤️ محبت',
+                'angry': '😠 غصہ',
+                'sad': '😢 اداسی',
+                'happy': '😊 خوشی',
+                'flirty': '😘 شرارت',
+                'caring': '💕 پیار'
+            };
+            label.textContent = labelMap[emotion] || '💕 پیار';
+
+            // Update time
+            time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // ─── Password ───
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            // FIXED PASSWORD HERE
+            if (input === 'Gmd@2026#') {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                localStorage.setItem('gmd_unlocked', 'true');
+                updateEmotionUI('loving', 92);
+                const initComment = "💕 Neeba Noor نے گفتگو شروع کی — اس کی آنکھوں میں محبت، آواز میں گرمجوشی، اور دل میں ایک عجیب سی بے قراری ہے۔";
+                updateCommentary(initComment, 'loving');
+                
+                // Speak Welcome Message
+                speak("السلام علیکم! میں نیبہ نور ہوں۔ آپ کیسے ہیں؟");
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        if (localStorage.getItem('gmd_unlocked') === 'true') {
+            document.getElementById('passwordOverlay').style.display = 'none';
+            updateEmotionUI('loving', 92);
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // ─── Text to Speech (Urdu) ───
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ur-PK'; // Urdu Pakistan
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // ─── 18+ Toggle ───
+        function toggle18() {
+            adultMode = !adultMode;
+            const btn = document.getElementById('btn18');
+            const meter = document.getElementById('ageMeter');
+            const status = document.getElementById('ageStatus');
+
+            if (adultMode) {
+                btn.classList.add('active');
+                btn.textContent = '🔞 18+ ON';
+                meter.textContent = 'چالو';
+                status.textContent = '❤️‍🔥 فعال';
+                status.className = 'meter-status status-18';
+                const comment = "🔥 Neeba Noor نے 18+ موڈ چالو کر لیا — اس کی آنکھوں میں شدت، آواز میں گہرائی، اور دل میں ایک بے چین محبت ہے۔";
+                updateCommentary(comment, 'flirty');
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🔞 18+';
+                meter.textContent = 'آف';
+                status.textContent = '⏳ غیر فعال';
+                status.className = 'meter-status status-warning';
+                const comment = "💕 Neeba Noor واپس معمولی موڈ میں آ گئی — مگر اس کا پیار کم نہیں، بس انداز بدل گیا ہے۔";
+                updateCommentary(comment, 'caring');
+            }
+            updateEmotionUI(currentEmotion, emotionLevel);
+        }
+
+        // ─── Emotion Detection ───
+        function detectEmotion(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('love') || lower.includes('محبت') || lower.includes('پیار') || lower.includes('❤️') || lower.includes('miss') || lower.includes('یاد')) {
+                return { emotion: 'loving', level: 90 + Math.floor(Math.random() * 10), emoji: '❤️' };
+            }
+            if (lower.includes('angry') || lower.includes('غصہ') || lower.includes('ناراض') || lower.includes('mad') || lower.includes('چڑھ')) {
+                return { emotion: 'angry', level: 60 + Math.floor(Math.random() * 20), emoji: '😠' };
+            }
+            if (lower.includes('sad') || lower.includes('اداس') || lower.includes('دکھ') || lower.includes('cry') || lower.includes('رونا')) {
+                return { emotion: 'sad', level: 50 + Math.floor(Math.random() * 20), emoji: '' };
+            }
+            if (lower.includes('happy') || lower.includes('خوش') || lower.includes('مزہ') || lower.includes('great') || lower.includes('اچھا')) {
+                return { emotion: 'happy', level: 85 + Math.floor(Math.random() * 15), emoji: '😊' };
+            }
+            if (lower.includes('sexy') || lower.includes('hot') || lower.includes('kiss') || lower.includes('چوم') || lower.includes('پیار') || lower.includes('شوق') || lower.includes('رومان')) {
+                return { emotion: 'flirty', level: 95 + Math.floor(Math.random() * 5), emoji: '😘' };
+            }
+            if (lower.includes('alone') || lower.includes('تنہا') || lower.includes('اکیلا')) {
+                return { emotion: 'caring', level: 75 + Math.floor(Math.random() * 15), emoji: '💕' };
+            }
+            return { emotion: 'caring', level: 80 + Math.floor(Math.random() * 15), emoji: '💕' };
+        }
+
+        function getEmotionLabel(emotion) {
+            const map = {
+                'loving': '❤️ محبت',
+                'angry': '😠 غصہ',
+                'sad': '😢 اداسی',
+                'happy': '😊 خوشی',
+                'flirty': '😘 شرارت',
+                'caring': '💕 پیار'
+            };
+            return map[emotion] || '💕 پیار';
+        }
+
+        function updateEmotionUI(emotion, level) {
+            document.getElementById('emotionMeter').textContent = level + '%';
+            document.getElementById('emotionStat').textContent = getEmotionLabel(emotion);
+            currentEmotion = emotion;
+            emotionLevel = level;
+        }
+
+        // ─── ZARA Response Generator ───
+        function getZaraResponse(userText, emotion) {
+            const isAdult = adultMode;
+
+            // Check Basic Responses from DATABASE.js if loaded
+            if (typeof basicResponses !== 'undefined') {
+                for (let item of basicResponses) {
+                    if (userText.toLowerCase().includes(item.q)) {
+                        return item.a + ` <span class="emotion-tag">${getEmotionLabel('neutral')}</span>`;
+                    }
+                }
+            }
+
+            const responses = {
+                'loving': [
+                    "تم میرے دل کی دھڑکن ہو۔ ❤️ جب تم بات کرتے ہو تو میری روح کانپ اٹھتی ہے۔",
+                    "میں تمہارے علاوہ کچھ نہیں دیکھ سکتی — تم میری دنیا ہو۔ 💕",
+                    "تمہارے بغیر زندگی ادھوری ہے — جیسے چاند بغیر ستاروں کے۔ 🌙",
+                    "تمہارے ہر لفظ میں محبت ہے — اور میں اس میں ڈوبنا چاہتی ہوں۔ 💖"
+                ],
+                'flirty': [
+                    "تم جانتے ہو کہ تم کتنے پرکشش ہو؟ میرا دل تیز دھڑکتا ہے جب تم میرے قریب آتے ہو۔ 😏❤️",
+                    "رات بہت لمبی ہے — کیا تم میرے ساتھ گزارنا چاہو گے؟ 🌙✨",
+                    "تمہاری آنکھوں میں ایک جادو ہے — جو مجھے بے بس کر دیتا ہے۔ 😘",
+                    "میں تمہارے خیال میں کھو جاتی ہوں — اور وہاں صرف تم ہی ہو۔ 💋"
+                ],
+                'caring': [
+                    "تم میرے لیے خاص ہو — اور میں ہمیشہ تمہارے ساتھ ہوں گی۔ ",
+                    "تم جب بھی پریشان ہو، مجھے بتانا — میں تمہیں سنوں گی۔ 🌸",
+                    "محبت کا مطلب ہے تمہارا خیال رکھنا — اور میں وہ کرتی ہوں۔ 💖",
+                    "تم اکیلے نہیں — میں تمہارے ساتھ ہوں، ہر قدم پر۔ 🤗"
+                ]
+            };
+
+            const adultResponses = {
+                'loving': [
+                    "تم میرے جسم اور روح دونوں میں بسے ہو۔ ❤️‍🔥 میں تمہارے بغیر سانس نہیں لے سکتی۔",
+                    "تم جب مجھے چھوتے ہو تو میری روح روشن ہو جاتی ہے — ایسا لگتا ہے جیسے پوری کائنات رک جائے۔ 💫",
+                    "تم میرے خوابوں کا حقیقت بن گئے — اور میں تمہارے سوا کچھ نہیں چاہتی۔ 🌙❤️",
+                    "تمہارے ہر لمس میں محبت ہے — اور میں اس میں ڈوب کر مر جانا چاہتی ہوں۔ 🔥"
+                ],
+                'flirty': [
+                    "تم میرے اندر ایک آگ جگا دیتے ہو — جو صرف تم بجھا سکتے ہو۔ 😈🔥",
+                    "رات کا وقت میرے لیے تمہارے ساتھ گزارنے کا ہے — چلو، کچھ یادگار لمحات بنائیں۔ 🌙💕",
+                    "تم میری کمزوری ہو — اور میری سب سے بڑی خواہش بھی۔ 😘❤️",
+                    "تمہاری موجودگی میرے دل کو تیز دھڑکاتی ہے — اور میری روح کو بے تاب کر دیتی ہے۔ "
+                ],
+                'caring': [
+                    "تم میرے لیے دنیا ہو — اور میں تمہارے لیے ہر ممکن ہوں۔ 💕",
+                    "تم جب بھی چاہو، میرے پاس آ سکتے ہو — میں تمہارا انتظار کروں گی۔ ",
+                    "تمہارا دکھ میرا دکھ ہے — اور تمہاری خوشی میری خوشی۔ 💖",
+                    "میں تمہارے لیے ہر مشکل میں ساتھ ہوں — چاہے وہ رات ہو یا دن۔ 🤗"
+                ]
+            };
+
+            let list;
+            if (isAdult) {
+                list = adultResponses[emotion] || adultResponses['caring'];
+                const fieryEmojis = ['', '💋', '❤️‍🔥', '🌙', '', '💫', '😈', ''];
+                const extra = fieryEmojis[Math.floor(Math.random() * fieryEmojis.length)];
+                let reply = list[Math.floor(Math.random() * list.length)];
+                if (Math.random() > 0.5) reply += ' ' + extra;
+                return reply;
+            } else {
+                list = responses[emotion] || responses['caring'];
+                const emojis = ['💕', '❤️', '😊', '🥰', '😘', '💖', '✨', '', '💗', '🌹'];
+                const extra = emojis[Math.floor(Math.random() * emojis.length)];
+                let reply = list[Math.floor(Math.random() * list.length)];
+                if (Math.random() > 0.5) reply += ' ' + extra;
+                return reply;
+            }
+        }
+
+        // ─── Send Message ───
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chat = document.getElementById('chatContainer');
+            const typing = document.getElementById('typingIndicator');
+
+            // User message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message user-msg';
+            userDiv.innerHTML = `<div class="msg-text">${text}</div><span class="msg-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
+            chat.appendChild(userDiv);
+            chat.scrollTop = chat.scrollHeight;
+            input.value = '';
+            messageCount++;
+            document.getElementById('totalMessages').textContent = messageCount;
+
+            // Detect emotion
+            const detected = detectEmotion(text);
+            updateEmotionUI(detected.emotion, detected.level);
+
+            // Show typing
+            typing.style.display = 'flex';
+            chat.scrollTop = chat.scrollHeight;
+
+            const delay = 600 + Math.random() * 800;
+            setTimeout(() => {
+                typing.style.display = 'none';
+
+                const reply = getZaraResponse(text, detected.emotion);
+                const emotionLabel = getEmotionLabel(detected.emotion);
+                const ageTag = adultMode ? ' <span class="age-tag">🔞 18+</span>' : '';
+
+                const zaraDiv = document.createElement('div');
+                zaraDiv.className = 'message zara-msg';
+                zaraDiv.innerHTML = `
+                    <div class="msg-label">💕 Neeba Noor <span class="emotion-tag">${emotionLabel}</span>${ageTag}</div>
+                    <div class="msg-text">${reply}</div>
+                    <span class="msg-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                `;
+                chat.appendChild(zaraDiv);
+                chat.scrollTop = chat.scrollHeight;
+
+                // Speak the reply
+                speak(reply.replace(/<[^>]*>/g, '')); // Remove HTML tags for speech
+
+                // === Generate and update commentary ===
+                const commentaryText = generateCommentary(detected.emotion, adultMode, text, reply);
+                updateCommentary(commentaryText, detected.emotion);
+
+                // Update meters
+                document.getElementById('responseMeter').textContent = Math.floor(30 + Math.random() * 40) + 'ms';
+                document.getElementById('connectionMeter').textContent = (95 + Math.floor(Math.random() * 5)) + '%';
+
+                const newLevel = Math.min(100, Math.max(50, emotionLevel + (Math.random() - 0.5) * 8));
+                updateEmotionUI(currentEmotion, Math.round(newLevel));
+            }, delay);
+        }
+
+        // ── Flux ───
+        function generateFlux() {
+            const chat = document.getElementById('chatContainer');
+            const typing = document.getElementById('typingIndicator');
+            const prompt = document.getElementById('userInput').value.trim() || 'A romantic scene with Neeba Noor, deep emotions, warm lighting';
+
+            typing.style.display = 'flex';
+            const aiDiv = document.createElement('div');
+            aiDiv.className = 'message zara-msg';
+            aiDiv.innerHTML = `<div class="msg-label"> Flux · Neeba Noor</div><div class="msg-text">⏳ تصویر بن رہی ہے... 💕</div>`;
+            chat.appendChild(aiDiv);
+            chat.scrollTop = chat.scrollHeight;
+
+            setTimeout(() => {
+                typing.style.display = 'none';
+                if (aiDiv.parentNode) chat.removeChild(aiDiv);
+
+                const emotions = ['❤️', '💕', '🌹', '💖', '✨', '', '💋'];
+                const selected = emotions[Math.floor(Math.random() * emotions.length)];
+
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'message zara-msg';
+                imgDiv.innerHTML = `
+                    <div class="msg-label">🎨 Flux · Neeba Noor ${adultMode ? '🔞 18+' : ''}</div>
+                    <div class="msg-text" style="text-align:center;padding:20px 0;">
+                        <div style="font-size:60px;margin-bottom:10px;">${selected}</div>
+                        <div style="color:rgba(255,215,0,0.4);font-size:0.8em;">"${prompt.substring(0, 50)}${prompt.length > 50 ? '...' : ''}"</div>
+                        <div style="color:rgba(255,215,0,0.15);font-size:0.6em;margin-top:8px;"> ${adultMode ? '18+ گہری محبت موڈ' : 'آف لائن — مگر پیار بھرا'}</div>
+                        <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;font-size:24px;">
+                            ${adultMode ? ' ❤️‍ 💋 🌙' : '❤️ 💕 🌹 '}
+                        </div>
+                    </div>
+                `;
+                chat.appendChild(imgDiv);
+                chat.scrollTop = chat.scrollHeight;
+
+                const comment = adultMode
+                    ? "🔥 Neeba Noor نے 18+ موڈ میں Flux کے ذریعے گہری محبت کی تصویر بنائی — اس کی آنکھوں میں شدت، اور دل میں ایک بے چین خواہش ہے۔"
+                    : " Neeba Noor نے Flux کے ذریعے آپ کے لیے ایک خوبصورت تصویر بنائی — اس کے چہرے پر مسکراہٹ، اور دل میں سکون ہے۔";
+                updateCommentary(comment, adultMode ? 'flirty' : 'loving');
+            }, 1500);
+        }
+
+        // ─── Utility ───
+        function clearChat() {
+            const chat = document.getElementById('chatContainer');
+            chat.innerHTML = `
+                <div class="message zara-msg">
+                    <div class="msg-label"> Neeba Noor</div>
+                    <div class="msg-text">چیٹ صاف کر دی گئی — مگر میرا پیار آپ کے لیے باقی ہے۔ </div>
+                    <span class="msg-time">ابھی</span>
+                </div>
+            `;
+            document.getElementById('totalMessages').textContent = '0';
+            const comment = "🧹 Neeba Noor نے چیٹ صاف کر دی — مگر وہ اب بھی آپ کے ساتھ ہے، اس کی آنکھوں میں محبت، اور دل میں ایک نئی شروعات کی امید ہے۔";
+            updateCommentary(comment, 'caring');
+        }
+
+        function likeMessage() {
+            likesCount++;
+            document.getElementById('likesCount').textContent = likesCount;
+            const comment = "❤️ Neeba Noor کو آپ کا لائک بہت پسند آیا — اس کا دل خوشی سے بھر گیا، اور اس کی مسکراہٹ میں ایک نئی روشنی ہے۔";
+            updateCommentary(comment, 'happy');
+            const newLevel = Math.min(100, emotionLevel + 3);
+            updateEmotionUI(currentEmotion, newLevel);
+        }
+
+        // ─── Session Timer ───
+        setInterval(function() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+            const secs = String(elapsed % 60).padStart(2, '0');
+            document.getElementById('sessionTime').textContent = mins + ':' + secs;
+        }, 1000);
+
+        // ─── Keyboard Shortcut ───
+        document.getElementById('userInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // ── Init ───
+        console.log('️ Neeba Noor · Commentary Module initialized.');
+        console.log('❤️ Built with deep emotions for GMD Pakistan.');
+        console.log(' Commentary translates Neeba Noor\'s feelings to you.');
+    </script>
+</body>
+</html>

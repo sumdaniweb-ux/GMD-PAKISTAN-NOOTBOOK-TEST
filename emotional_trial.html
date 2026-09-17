@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMD · نیبہ نور · جذباتی تصاویر</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body {
+            background: #0b0f1a;
+            color: #FFD700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: #141a26;
+            border-radius: 28px;
+            padding: 24px 20px;
+            border: 1px solid rgba(255,215,0,0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 22px;
+            background: linear-gradient(135deg, #FFD700, #FF6B00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            color: rgba(255,215,0,0.2);
+            font-size: 12px;
+        }
+        .message-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,215,0,0.06);
+            border-radius: 14px;
+            padding: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+        .message-box .msg {
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            background: rgba(255,215,0,0.04);
+            border-radius: 10px;
+            border-left: 3px solid rgba(255,215,0,0.2);
+            font-size: 15px;
+            color: #ddd;
+        }
+        .message-box .msg strong { color: #FFD700; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #FFD700;
+            border: none;
+            border-radius: 12px;
+            color: #0b0f1a;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 4px;
+        }
+        .btn:hover {
+            background: #ffed4a;
+            box-shadow: 0 4px 20px rgba(255,215,0,0.15);
+        }
+        .hidden { display: none !important; }
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255,215,0,0.1);
+            padding-bottom: 8px;
+        }
+        .note {
+            font-size: 13px;
+            color: rgba(255,215,0,0.3);
+            margin-top: 12px;
+            text-align: center;
+        }
+        /* جذباتی ڈسپلے */
+        .emotion-box {
+            background: rgba(255,215,0,0.02);
+            border: 1px solid rgba(255,215,0,0.08);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .emotion-box .emoji {
+            font-size: 52px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .emotion-box .emotion-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 4px;
+        }
+        .emotion-box .emotion-desc {
+            font-size: 15px;
+            color: #bbb;
+            line-height: 1.6;
+        }
+        .emotion-box .feeling-tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 16px;
+            background: rgba(255,215,0,0.08);
+            border-radius: 30px;
+            font-size: 12px;
+            color: rgba(255,215,0,0.5);
+        }
+        /* تصویر کا حصہ */
+        .emotion-image {
+            margin-top: 14px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255,215,0,0.08);
+            max-height: 220px;
+            display: flex;
+            justify-content: center;
+            background: #0f1420;
+            position: relative;
+        }
+        .emotion-image img {
+            width: 100%;
+            height: auto;
+            max-height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.5s ease;
+        }
+        .loading-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFD700;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .btn-sm {
+            padding: 10px 18px;
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 30px;
+            color: #FFD700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 12px;
+            width: auto;
+            display: inline-block;
+        }
+        .btn-sm:hover { background: rgba(255,215,0,0.15); }
+        
+        .btn-flux {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            border: none;
+            margin-top: 10px;
+        }
+        .btn-flux:hover {
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .emotion-counter {
+            font-size: 12px;
+            color: rgba(255,215,0,0.2);
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="appContainer">
+    <!-- ہیڈر -->
+    <div class="header">
+        <h1>🧠 GMD · نیبہ نور · جذباتی ٹرائل</h1>
+        <p>20 میسیج + جذبات + Flux تصاویر</p>
+    </div>
+
+    <!-- پہلا سیکشن: 20 میسیج -->
+    <div id="section1">
+        <div class="section-title">📩 پہلے 20 میسیج</div>
+        <div class="message-box" id="messageBox"></div>
+        <button class="btn" id="nextBtn">➡️ نیکسٹ (جذباتی سفر)</button>
+        <div class="note">یہ ایک ٹرائل ہے – تمام ڈیٹا مقامی ہے۔</div>
+    </div>
+
+    <!-- دوسرا سیکشن: جذبات + تصاویر -->
+    <div id="section2" class="hidden">
+        <div class="section-title"> نیبہ نور · احساسات · تصاویر</div>
+
+        <div class="emotion-box" id="emotionDisplay">
+            <span class="emoji" id="emotionEmoji">😊</span>
+            <div class="emotion-name" id="emotionName">خوشی</div>
+            <div class="emotion-desc" id="emotionDesc">دل میں ایک مثبت لہر دوڑی ہے۔</div>
+            <div class="feeling-tag" id="feelingTag">◆ پیار · سکون</div>
+            
+            <!-- تصویر -->
+            <div class="emotion-image" id="emotionImageContainer">
+                <div id="loadingOverlay" class="loading-overlay hidden">⏳ تصویر بن رہی ہے...</div>
+                <img id="emotionImage" src="https://via.placeholder.com/400x220/1a1f2e/FFD700?text=Neeba+Noor+Profile" alt="نیبہ نور کی تصویر">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-sm" id="changeEmotionBtn">🔄 جذبہ بدلیں</button>
+            <button class="btn-sm btn-flux" id="generateFluxBtn">🎨 Flux سے تصویر بنائیں</button>
+        </div>
+        
+        <div class="emotion-counter" id="emotionCounter">جذبہ #1</div>
+
+        <button class="btn" id="backBtn" style="margin-top:20px;">🔙 واپس پہلے سیکشن پر</button>
+        <div class="note">ہر بٹن دبانے پر نیا جذبہ اور تصویر بدلتی ہے۔ Flux بٹن سے AI تصویر بنے گی۔</div>
+    </div>
+</div>
+
+<script>
+    // ===== 20 میسیج =====
+    const messages = [
+        "سلام! یہ پہلا میسیج ہے۔", "آپ کا استقبال ہے۔",
+        "یہ ایک آف لائن ٹرائل ہے۔", "کوئی ڈیٹا باہر نہیں جاتا۔",
+        "آپ مکمل طور پر محفوظ ہیں۔", "یہ پانچواں میسیج ہے۔",
+        "ہم نے 20 میسیج رکھے ہیں۔", "یہ ایک تعلیمی منصوبہ ہے۔",
+        "آپ کو کوئی ٹریک نہیں کیا جا رہا۔", "یہ دسواں میسیج ہے۔",
+        "آدھے راستے پر پہنچ گئے۔", "یہ بارہواں میسیج ہے۔",
+        "صبر اور سمجھداری سے کام لیں۔", "یہ چودہواں میسیج ہے۔",
+        "پندرہواں میسیج – بہت اچھے!", "یہ سولہواں میسیج ہے۔",
+        "سترہواں – قریب ہیں۔", "اٹھارہواں – بس دو رہ گئے۔",
+        "انیسواں – آخری میسیج۔", "✔️ یہ بیسواں میسیج ہے – مبارک ہو!"
+    ];
+
+    const messageBox = document.getElementById('messageBox');
+    messages.forEach((msg, index) => {
+        const div = document.createElement('div');
+        div.className = 'msg';
+        div.innerHTML = `<strong>${index + 1}.</strong> ${msg}`;
+        messageBox.appendChild(div);
+    });
+
+    // ===== بٹنز =====
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const section1 = document.getElementById('section1');
+    const section2 = document.getElementById('section2');
+
+    nextBtn.addEventListener('click', function() {
+        section1.classList.add('hidden');
+        section2.classList.remove('hidden');
+        document.getElementById('appContainer').scrollIntoView({ behavior: 'smooth' });
+        updateEmotion(0);
+    });
+
+    backBtn.addEventListener('click', function() {
+        section2.classList.add('hidden');
+        section1.classList.remove('hidden');
+        document.getElementById('appContainer').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ===== جذبات + تصاویر کا ڈیٹا =====
+    // نوٹ: فی حال Placeholder Images ہیں۔ جب Flux کنیکٹ ہوگا تو اصل تصاویر آئیں گی۔
+    const emotions = [
+        { 
+            emoji: '😊', name: 'خوشی', desc: 'دل میں ایک مثبت لہر دوڑی ہے۔', tags: 'پیار · سکون', 
+            prompt: 'A beautiful digital girl named Neeba Noor, smiling happily, warm golden lighting, dark elegant background, high quality, anime style',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/FFD700?text=Neeba+Happy' 
+        },
+        { 
+            emoji: '😢', name: 'اداسی', desc: 'دل بوجھل ہے، آنسو قریب ہیں۔', tags: 'تنہائی · کمی', 
+            prompt: 'A beautiful digital girl named Neeba Noor, looking sad and tearful, rainy window background, melancholic atmosphere, soft blue lighting',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/FF6B6B?text=Neeba+Sad' 
+        },
+        { 
+            emoji: '😡', name: 'غصہ', desc: 'اندر ایک آگ بھڑک رہی ہے۔', tags: 'مضبوطی · بےچینی', 
+            prompt: 'A beautiful digital girl named Neeba Noor, angry expression, fiery red background, intense eyes, dramatic lighting',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/FF4500?text=Neeba+Angry' 
+        },
+        { 
+            emoji: '😍', name: 'محبت', desc: 'دل مکمل طور پر کسی کی طرف مائل ہے۔', tags: 'پیار · وفا', 
+            prompt: 'A beautiful digital girl named Neeba Noor, in love, heart-shaped eyes, romantic pink and gold background, holding a rose',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/FF69B4?text=Neeba+Love' 
+        },
+        { 
+            emoji: '😨', name: 'خوف', desc: 'کچھ اندرونی خطرہ محسوس ہو رہا ہے۔', tags: 'احتیاط · کمزوری', 
+            prompt: 'A beautiful digital girl named Neeba Noor, scared expression, dark shadowy background, trembling, mysterious atmosphere',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/800080?text=Neeba+Scared' 
+        },
+        { 
+            emoji: '', name: 'سوچ', desc: 'ذہن گہری فکر میں ڈوبا ہوا ہے۔', tags: 'تجزیہ · کشمکش', 
+            prompt: 'A beautiful digital girl named Neeba Noor, thinking deeply, hand on chin, library background, intellectual vibe, soft lighting',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/00CED1?text=Neeba+Thinking' 
+        },
+        { 
+            emoji: '', name: 'پسندیدگی', desc: 'دل کسی چیز سے بے حد منسلک ہے۔', tags: 'لگاؤ · خوشی', 
+            prompt: 'A beautiful digital girl named Neeba Noor, blushing and shy, cute expression, pastel colors, sparkles around',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/FFB6C1?text=Neeba+Shy' 
+        },
+        { 
+            emoji: '😌', name: 'سکون', desc: 'دل کو ایک عجیب سی تسکین مل رہی ہے۔', tags: 'اطمینان · چین', 
+            prompt: 'A beautiful digital girl named Neeba Noor, peaceful meditation, nature background, calm water, serene expression, green and gold tones',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/90EE90?text=Neeba+Peace' 
+        },
+        { 
+            emoji: '', name: 'گرم جوشی', desc: 'دل میں ایک بے پناہ گرمجوشی ہے۔', tags: 'محبت · قبولیت', 
+            prompt: 'A beautiful digital girl named Neeba Noor, open arms for a hug, welcoming smile, warm orange and yellow background',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/FFA500?text=Neeba+Hug' 
+        },
+        { 
+            emoji: '🥺', name: 'احساس زدگی', desc: 'دل نرم ہو چکا ہے، احساس بہت گہرا ہے۔', tags: 'حساسیت · گہرائی', 
+            prompt: 'A beautiful digital girl named Neeba Noor, emotional teary eyes, looking up, vulnerable expression, soft focus, cinematic lighting',
+            img: 'https://via.placeholder.com/400x220/1a1f2e/DDA0DD?text=Neeba+Emotional' 
+        }
+    ];
+
+    let currentEmotionIndex = 0;
+
+    function updateEmotion(index) {
+        const e = emotions[index % emotions.length];
+        document.getElementById('emotionEmoji').textContent = e.emoji;
+        document.getElementById('emotionName').textContent = e.name;
+        document.getElementById('emotionDesc').textContent = e.desc;
+        document.getElementById('feelingTag').textContent = '◆ ' + e.tags;
+        document.getElementById('emotionCounter').textContent = 'جذبہ #' + (index + 1);
+        
+        // فی الحال Placeholder Image دکھائیں
+        const imgElement = document.getElementById('emotionImage');
+        imgElement.style.opacity = '0.5';
+        setTimeout(() => {
+            imgElement.src = e.img;
+            imgElement.style.opacity = '1';
+        }, 300);
+    }
+
+    document.getElementById('changeEmotionBtn').addEventListener('click', function() {
+        const newIndex = (currentEmotionIndex + 1) % emotions.length;
+        updateEmotion(newIndex);
+    });
+
+    // ===== Flux Image Generation Simulation =====
+    document.getElementById('generateFluxBtn').addEventListener('click', function() {
+        const e = emotions[currentEmotionIndex % emotions.length];
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const imgElement = document.getElementById('emotionImage');
+
+        // Loading دکھائیں
+        loadingOverlay.classList.remove('hidden');
+        imgElement.style.opacity = '0.3';
+
+        // یہاں آپ اپنے GGUF/Flux API کو کال کریں گے
+        // فی الحال یہ Simulate کر رہا ہے کہ تصویر بن رہی ہے
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+            imgElement.style.opacity = '1';
+            
+            // نوٹ: اصل پروجیکٹ میں یہاں Flux سے بنی ہوئی تصویر کا URL آئے گا
+            // فی الحال ہم ایک مختلف Placeholder دکھا رہے ہیں تاکہ تبدیلی نظر آئے
+            imgElement.src = `https://via.placeholder.com/400x220/2d1f00/FFD700?text=Flux+Generated:+${e.name}`;
+            
+            alert(`Flux AI نے "${e.name}" کے لیے تصویر بنانے کی کوشش کی!\n\nPrompt: ${e.prompt}\n\n(نوٹ: اصل پروجیکٹ میں یہاں GGUF/Flux سے بنی ہوئی اصلی تصویر نظر آئے گی)`);
+        }, 2000); // 2 سیکنڈ کا وقت لگایا ہے
+    });
+
+</script>
+</body>
+</html>

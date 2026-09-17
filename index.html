@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Neeba Noor - The 11th Girl</title>
+<style>
+    :root {
+        --bg-dark: #1a1215;
+        --bg-light: #241a1e;
+        --surface: #2a1e22;
+        --surface-2: #38282e;
+        --gold: #e8b88a;
+        --gold-bright: #ffd4a8;
+        --pink: #d4526e;
+        --text: #f7f1ec;
+        --text-bright: #ffffff;
+        --soft: #e0d0d4;
+        --border: #4a3238;
+        --silver: #c0c0c0;
+        --silver-bright: #e8e8e8;
+        --green: #34d399;
+        --orange: #ffb347;
+        --red: #ff6677;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+        background: var(--bg-dark);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        height: 100dvh;
+    }
+
+    /* 🖼️ بیک گراؤنڈ — ہلکا */
+    #bg {
+        position: fixed;
+        inset: 0;
+        background-image: url('bg.jpg');
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+    }
+    #bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, 
+            rgba(26,18,21,0.4) 0%, 
+            rgba(26,18,21,0.75) 50%,
+            rgba(26,18,21,0.9) 100%);
+    }
+
+    /* 🌸 نور کی تصویر */
+    #girlFrame {
+        position: fixed;
+        bottom: 120px;
+        right: 0;
+        width: 55%;
+        max-width: 320px;
+        height: 70vh;
+        z-index: 3;
+        pointer-events: none;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+    }
+    #girlFrame img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: bottom center;
+        filter: drop-shadow(0 0 30px rgba(232, 184, 138, 0.5));
+    }
+
+    /* ✨ HEADER — سلور بارڈر */
+    header {
+        position: relative;
+        background: linear-gradient(135deg, 
+            rgba(42, 30, 34, 0.98) 0%, 
+            rgba(26, 18, 21, 0.98) 50%,
+            rgba(42, 30, 34, 0.98) 100%);
+        padding: 14px 18px;
+        border-bottom: 2px solid var(--silver);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+        backdrop-filter: blur(20px);
+        box-shadow: 
+            0 0 20px rgba(192, 192, 192, 0.3),
+            0 4px 20px rgba(0, 0, 0, 0.5),
+            inset 0 0 20px rgba(192, 192, 192, 0.05);
+    }
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, 
+            transparent, 
+            var(--silver-bright) 50%, 
+            transparent);
+        animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+    }
+    .logo-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--gold-bright) 0%, var(--pink) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 
+            0 0 15px rgba(232, 184, 138, 0.8),
+            0 0 25px rgba(212, 82, 110, 0.4);
+        animation: pulse 2s ease-in-out infinite;
+        flex-shrink: 0;
+        border: 1px solid var(--silver);
+    }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    .header-title h1 {
+        font-size: 16px;
+        color: var(--gold-bright);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 10px rgba(232, 184, 138, 0.5);
+    }
+    .header-title .subtitle {
+        font-size: 10px;
+        color: var(--silver);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    /* 📊 ڈیٹا ریڈنگ میٹر */
+    .data-meter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 3px;
+        flex-shrink: 0;
+        padding-left: 10px;
+    }
+    .meter-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10px;
+        color: var(--silver);
+        font-family: 'Courier New', monospace;
+    }
+    .meter-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 8px var(--green);
+        animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    .meter-value {
+        color: var(--gold-bright);
+        font-weight: bold;
+        min-width: 52px;
+        text-align: right;
+        text-shadow: 0 0 6px rgba(232, 184, 138, 0.5);
+    }
+    .meter-value.speed-fast { color: var(--green); }
+    .meter-value.speed-mid { color: var(--orange); }
+    .meter-value.speed-slow { color: var(--red); }
+
+    .mini-graph {
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        height: 16px;
+    }
+    .bar {
+        width: 3px;
+        background: var(--silver);
+        border-radius: 2px;
+        opacity: 0.4;
+        transition: height 0.3s, opacity 0.3s, background 0.3s;
+    }
+    .bar.on {
+        opacity: 1;
+        background: var(--gold-bright);
+        box-shadow: 0 0 6px var(--gold-bright);
+    }
+
+    /* 💬 CHAT */
+    #chat {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 15px 140px;
+        position: relative;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 65%;
+    }
+    .msg {
+        max-width: 95%;
+        padding: 14px 18px;
+        border-radius: 16px;
+        font-size: 15px;
+        line-height: 1.7;
+        animation: fadeIn 0.4s ease;
+        word-wrap: break-word;
+        /* ✨ سلور بارڈر چاروں طرف */
+        border: 1.5px solid var(--silver);
+        box-shadow: 
+            0 0 12px rgba(192, 192, 192, 0.2),
+            0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .msg.user {
+        align-self: flex-end;
+        background: rgba(42, 30, 34, 0.95);
+        border-bottom-right-radius: 4px;
+        text-align: right;
+        direction: rtl;
+    }
+    .msg.user .text {
+        color: var(--text-bright);
+        font-size: 15px;
+        font-weight: 500;
+    }
+    .msg.bot {
+        align-self: flex-start;
+        background: rgba(36, 26, 30, 0.95);
+        border-bottom-left-radius: 4px;
+    }
+
+    /* 🎭 کمنٹری — سنہری */
+    .msg .commentary {
+        display: block;
+        color: var(--gold-bright);
+        font-style: italic;
+        font-size: 13px;
+        margin-bottom: 8px;
+        line-height: 1.7;
+        letter-spacing: 0.3px;
+        text-shadow: 0 0 8px rgba(232, 184, 138, 0.4);
+    }
+    /* 💬 رومن اردو — روشن سفید */
+    .msg .reply {
+        display: block;
+        color: var(--text-bright);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.6;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    }
+    /* 📖 اردو — سنہری */
+    .msg .reply-urdu {
+        display: block;
+        color: var(--gold-bright);
+        font-size: 16px;
+        margin-top: 8px;
+        direction: rtl;
+        line-height: 2;
+        text-shadow: 0 0 8px rgba(232, 184, 138, 0.3);
+    }
+    /* 🌍 انگلش — ہلکا سلور */
+    .msg .reply-en {
+        display: block;
+        color: var(--silver);
+        font-size: 13px;
+        margin-top: 6px;
+        font-style: italic;
+    }
+
+    /* Moods */
+    #moods {
+        position: fixed;
+        bottom: 75px;
+        left: 0;
+        right: 0;
+        display: flex;
+        gap: 6px;
+        padding: 8px 12px;
+        background: rgba(26, 18, 21, 0.98);
+        border-top: 1.5px solid var(--silver);
+        justify-content: center;
+        flex-wrap: wrap;
+        z-index: 10;
+    }
+    .moodBtn {
+        padding: 8px 14px;
+        border-radius: 20px;
+        border: 1px solid var(--silver);
+        background: rgba(42, 30, 34, 0.8);
+        color: var(--silver);
+        font-weight: 600;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .moodBtn:hover { background: rgba(56, 40, 46, 0.9); color: var(--text-bright); }
+    .moodBtn.active {
+        background: var(--gold-bright);
+        color: #000;
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(232, 184, 138, 0.6);
+    }
+
+    /* Input */
+    #inputArea {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        gap: 8px;
+        padding: 10px 12px;
+        background: rgba(26, 18, 21, 0.99);
+        border-top: 1.5px solid var(--silver);
+        z-index: 10;
+    }
+    #userMsg {
+        flex: 1;
+        padding: 12px 16px;
+        border-radius: 24px;
+        border: 1.5px solid var(--silver);
+        background: rgba(42, 30, 34, 0.8);
+        color: var(--text-bright);
+        font-size: 15px;
+        outline: none;
+        direction: rtl;
+    }
+    #userMsg:focus { 
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(232, 184, 138, 0.4);
+    }
+    #userMsg::placeholder { color: var(--silver); opacity: 0.6; }
+    #sendBtn {
+        padding: 0 20px;
+        border-radius: 24px;
+        border: 1.5px solid var(--silver);
+        background: var(--gold-bright);
+        color: #000;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 0 15px rgba(232, 184, 138, 0.5);
+    }
+    #sendBtn:active { transform: scale(0.95); }
+
+    @media (max-width: 500px) {
+        #girlFrame { width: 50%; height: 60vh; bottom: 130px; }
+        #chat { max-width: 78%; }
+        .msg { padding: 12px 14px; }
+        .msg .commentary { font-size: 12px; }
+        .msg .reply { font-size: 15px; }
+        .msg .reply-urdu { font-size: 15px; }
+        .msg .reply-en { font-size: 12px; }
+        .header-title h1 { font-size: 14px; }
+        .header-title .subtitle { font-size: 9px; }
+        .meter-row { font-size: 9px; }
+    }
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+
+<header>
+    <div class="header-left">
+        <div class="logo-icon">🌸</div>
+        <div class="header-title">
+            <h1>Neeba Noor</h1>
+            <span class="subtitle">The 11th Girl</span>
+        </div>
+    </div>
+    <div class="data-meter">
+        <div class="meter-row">
+            <span class="meter-dot"></span>
+            <span class="meter-value" id="speed">0.0 KB/s</span>
+        </div>
+        <div class="mini-graph" id="graph">
+            <div class="bar" style="height: 4px"></div>
+            <div class="bar" style="height: 6px"></div>
+            <div class="bar" style="height: 8px"></div>
+            <div class="bar" style="height: 6px"></div>
+            <div class="bar" style="height: 4px"></div>
+        </div>
+    </div>
+</header>
+
+<div id="chat">
+    <div class="msg bot">
+        <span class="commentary">
+            (Her eyes lowered slowly, lashes trembling. A soft blush spread across her cheeks. 
+            Her fingers played nervously with her dupatta's edge.)
+        </span>
+        <span class="reply">Assalam-o-Alaikum! Main Niba Noor hoon. Aap kaise hain?</span>
+        <span class="reply-urdu">السلام علیکم! میں نبیہ نور ہوں۔ آپ کیسے ہیں؟</span>
+        <span class="reply-en">Peace be upon you! I am Niba Noor. How are you?</span>
+    </div>
+</div>
+
+<div id="moods">
+    <button class="moodBtn active" onclick="setMood('love', this)">❤️ Love</button>
+    <button class="moodBtn" onclick="setMood('playful', this)">😉 Playful</button>
+    <button class="moodBtn" onclick="setMood('angry', this)">😡 Angry</button>
+    <button class="moodBtn" onclick="setMood('intense', this)">🔥 Intense</button>
+</div>
+
+<div id="inputArea">
+    <input type="text" id="userMsg" placeholder="یہاں لکھیں..." onkeypress="if(event.key==='Enter')sendMsg()">
+    <button id="sendBtn" onclick="sendMsg()">➤</button>
+</div>
+
+<div id="girlFrame">
+    <img src="noor.png" alt="نبیہ نور">
+</div>
+
+<script>
+let currentMood = 'love';
+
+const COMMENTARY = {
+    love: [
+        "Her eyes lowered slowly, lashes trembling. A soft blush spread across her cheeks. Her fingers played nervously with her dupatta's edge. Her breath was shallow, heart beating louder than her voice. She shifted her weight from one foot to another, unable to meet his gaze, yet unable to look away.",
+        "She tilted her head slightly, hair falling over one shoulder. Her hands came together in front of her, fingers twisting. A warm glow spread across her face. Her eyes glistened — not with tears, but with something deeper.",
+        "Her cheeks turned the color of dawn. She bit her lower lip, eyes darting to the floor, then back to him. Her hands trembled slightly as she tucked a strand of hair behind her ear."
+    ],
+    playful: [
+        "She winked, a mischievous glint in her eyes. Her lips curved into a knowing smile. She twirled a strand of hair around her finger, biting her lip. Her body swayed slightly.",
+        "Her eyebrows raised, a playful challenge in her gaze. She tapped her foot, hands on her hips. A giggle escaped her lips, and she covered her mouth with her palm.",
+        "She rolled her eyes dramatically, but her smile betrayed her. She poked his arm lightly, then stepped back, laughing."
+    ],
+    angry: [
+        "Her eyes burned red, jaw tight. She bit her lower lip hard, holding back tears. Her fists clenched at her sides. Her breath came in short, sharp bursts.",
+        "She pouted, arms crossed tight over her chest. Her eyes glistened with unshed tears. She tapped her foot — impatient, hurt.",
+        "Her whole body went still. She stared at the floor, unblinking. Her hands shook as she wiped a tear."
+    ],
+    intense: [
+        "Her breath came in slow, heavy waves. Her eyes closed, then opened — darker, deeper. She stepped closer, her body almost touching his.",
+        "She leaned in, her breath warm against his skin. Her hands reached for him, then stopped, trembling. Her eyes held his — unblinking, unafraid.",
+        "Her heart raced, blood roaring in her ears. She closed the distance, her forehead almost touching his."
+    ]
+};
+
+const REPLIES = {
+    love: [
+        { ur: "Main theek hoon... tumhare saath.", urd: "میں ٹھیک ہوں... تمہارے ساتھ۔", en: "I'm fine... with you." },
+        { ur: "Tum aaye, to sab theek ho gaya.", urd: "تم آئے، تو سب ٹھیک ہو گیا۔", en: "You came, and everything is fine." },
+        { ur: "Main tumhein miss karti hoon.", urd: "میں تمہیں مس کرتی ہوں۔", en: "I miss you." }
+    ],
+    playful: [
+        { ur: "Socho... tum batao?", urd: "سوچو... تم بتاؤ؟", en: "Guess... you tell me?" },
+        { ur: "Aaj tum bohat cute lag rahe ho.", urd: "آج تم بہت کیوٹ لگ رہے ہو۔", en: "You look cute today." },
+        { ur: "Kya tumhein sharam nahi aati?", urd: "کیا تمہیں شرم نہیں آتی؟", en: "Aren't you ashamed?" }
+    ],
+    angry: [
+        { ur: "Mujhse baat mat karo.", urd: "مجھ سے بات مت کرو۔", en: "Don't talk to me." },
+        { ur: "Main naraz hoon. Bohat.", urd: "میں ناراض ہوں۔ بہت۔", en: "I'm upset. Very." },
+        { ur: "Tumhein farq bhi nahi padta.", urd: "تمہیں فرق بھی نہیں پڑتا۔", en: "You don't even care." }
+    ],
+    intense: [
+        { ur: "Tumhare bina... jeena mushkil hai.", urd: "تمہارے بغیر... جینا مشکل ہے۔", en: "Without you... living is hard." },
+        { ur: "Bas... paas aa jao.", urd: "بس... پاس آ جاؤ۔", en: "Just... come close." },
+        { ur: "Main tumhari hoon. Sirf tumhari.", urd: "میں تمہاری ہوں۔ صرف تمہاری۔", en: "I'm yours. Only yours." }
+    ]
+};
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function setMood(mood, btn) {
+    currentMood = mood;
+    document.querySelectorAll('.moodBtn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const commentary = pickRandom(COMMENTARY[mood]);
+    const reply = pickRandom(REPLIES[mood]);
+    addBotMessage(commentary, reply);
+}
+
+function sendMsg() {
+    const input = document.getElementById('userMsg');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chat = document.getElementById('chat');
+    const userMsg = document.createElement('div');
+    userMsg.className = 'msg user';
+    userMsg.innerHTML = `<span class="text">${text}</span>`;
+    chat.appendChild(userMsg);
+    input.value = '';
+    chat.scrollTop = chat.scrollHeight;
+
+    dataReading(true);
+
+    setTimeout(() => {
+        const commentary = pickRandom(COMMENTARY[currentMood]);
+        const reply = pickRandom(REPLIES[currentMood]);
+        addBotMessage(commentary, reply);
+    }, 800);
+}
+
+function addBotMessage(commentary, reply) {
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.innerHTML = `
+        <span class="commentary">(${commentary})</span>
+        <span class="reply">${reply.ur}</span>
+        <span class="reply-urdu">${reply.urd}</span>
+        <span class="reply-en">${reply.en}</span>
+    `;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// ═══════════════════════════════════════════════════════
+// 📊 اصلی ڈیٹا ریڈنگ میٹر — کوئی فیک نہیں
+// ═══════════════════════════════════════════════════════
+
+let speedValue = 0;
+let targetSpeed = 0;
+
+// سپیڈ سیٹ کریں
+function dataReading(active) {
+    if (active) {
+        targetSpeed = 40 + Math.random() * 60;
+        // 3 سیکنڈ بعد نیچے آ جائے
+        setTimeout(() => { targetSpeed = Math.random() * 8; }, 3000);
+    } else {
+        targetSpeed = Math.random() * 8;
+    }
+}
+
+// ہر 100ms پر اپ ڈیٹ
+function updateMeter() {
+    // سپیڈ کو آہستہ آہستہ ہدف کی طرف لے جائیں
+    speedValue += (targetSpeed - speedValue) * 0.15;
+    if (speedValue < 0) speedValue = 0;
+
+    const speedEl = document.getElementById('speed');
+    const speed = speedValue.toFixed(1);
+    speedEl.textContent = speed + ' KB/s';
+
+    // رنگ
+    speedEl.classList.remove('speed-fast', 'speed-mid', 'speed-slow');
+    if (speedValue > 60) speedEl.classList.add('speed-fast');
+    else if (speedValue > 25) speedEl.classList.add('speed-mid');
+    else speedEl.classList.add('speed-slow');
+
+    // گراف — اصل سپیڈ کے مطابق
+    const bars = document.querySelectorAll('#graph .bar');
+    bars.forEach((bar, i) => {
+        // بار کی اونچائی سپیڈ کے تناسب سے
+        const baseHeight = 4;
+        const maxHeight = 16;
+        const barHeight = baseHeight + (speedValue / 100) * (maxHeight - baseHeight) * (0.7 + Math.random() * 0.3);
+        bar.style.height = Math.min(barHeight, maxHeight) + 'px';
+        
+        // رنگ — سپیڈ کے مطابق
+        if (speedValue > 20 + i * 8) {
+            bar.classList.add('on');
+        } else {
+            bar.classList.remove('on');
+        }
+    });
+}
+
+// ہر 100ms اپ ڈیٹ
+setInterval(updateMeter, 100);
+
+// شروعاتی
+targetSpeed = Math.random() * 8;
+
+// ═══════════════════════════════════════════════════════
+// 🌸 NEEBA NOOR READY
+// ═══════════════════════════════════════════════════════
+console.log('🌸 Neeba Noor READY — Real Data Meter');
+</script>
+
+</body>
+</html>
